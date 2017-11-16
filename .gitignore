@@ -2,3 +2,5 @@ bin
 testbk*
 *.dat
 *.rec
+.vscode/tags
+.venv/
