@@ -1,0 +1,4 @@
+{
+    "git.enabled": false,
+    "python.pythonPath": "${workspaceRoot}/.venv/bin/python"
+}

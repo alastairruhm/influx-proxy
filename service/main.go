@@ -16,7 +16,7 @@ import (
 	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 	redis "gopkg.in/redis.v5"
 
-	"github.com/eleme/influx-proxy/backend"
+	"github.com/alastairruhm/influx-proxy/backend"
 )
 
 var (
