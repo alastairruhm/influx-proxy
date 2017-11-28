@@ -4,3 +4,4 @@ testbk*
 *.rec
 .vscode/tags
 .venv/
+.idea/
