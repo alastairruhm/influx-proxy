@@ -89,6 +89,7 @@ func NewRedisConfigSource(options *redis.Options, node string) (rcs *RedisConfig
 }
 
 func (rcs *RedisConfigSource) LoadNode() (nodecfg NodeConfig, err error) {
+
 	val, err := rcs.client.HGetAll("default_node").Result()
 	if err != nil {
 		log.Printf("redis load error: b:%s", rcs.node)
@@ -102,8 +103,15 @@ func (rcs *RedisConfigSource) LoadNode() (nodecfg NodeConfig, err error) {
 	}
 
 	val, err = rcs.client.HGetAll("n:" + rcs.node).Result()
+
 	if err != nil {
 		log.Printf("redis load error: b:%s", rcs.node)
+		return
+	}
+
+	if len(val) == 0 {
+		err = ErrIllegalConfig
+		log.Printf("load node error: b:%s not configured", rcs.node)
 		return
 	}
 
