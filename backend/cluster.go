@@ -223,7 +223,6 @@ func (ic *InfluxCluster) loadBackends() (backends map[string]BackendAPI, bas []B
 	if err != nil {
 		return
 	}
-
 	for name, cfg := range bkcfgs {
 		backends[name], err = NewBackends(cfg, name)
 		if err != nil {
@@ -234,6 +233,7 @@ func (ic *InfluxCluster) loadBackends() (backends map[string]BackendAPI, bas []B
 
 	if ic.nexts != "" {
 		for _, nextname := range strings.Split(ic.nexts, ",") {
+			nextname = strings.TrimSpace(nextname)
 			ba, ok := backends[nextname]
 			if !ok {
 				err = ErrBackendNotExist
@@ -254,7 +254,6 @@ func (ic *InfluxCluster) loadMeasurements(backends map[string]BackendAPI) (m2bs 
 	if err != nil {
 		return
 	}
-
 	for name, bs_names := range m_map {
 		var bss []BackendAPI
 		for _, bs_name := range bs_names {
@@ -456,10 +455,10 @@ func (ic *InfluxCluster) WriteRow(line []byte) {
 	}
 
 	bs, ok := ic.GetBackends(key)
-	if !ok {
-		log.Printf("new measurement: %s\n", key)
-		atomic.AddInt64(&ic.stats.PointsWrittenFail, 1)
-		// TODO: new measurement?
+	if !ok { // fall to default rule, write this measurement in all backends
+		// log.Printf("new measurement: %s\n", key)
+		// atomic.AddInt64(&ic.stats.PointsWrittenFail, 1)
+		log.Printf("no match: %s\n", key)
 		return
 	}
 

@@ -22,5 +22,9 @@ bench:
 clean:
 	rm -rf bin
 
+dev:
+	mkdir -p bin
+	go build -o bin/influx-proxy github.com/alastairruhm/influx-proxy/service
+	bin/influx-proxy -log-file-path ""
 
 ### Makefile ends here
