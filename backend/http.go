@@ -41,6 +41,7 @@ func Compress(buf *bytes.Buffer, p []byte) (err error) {
 type HttpBackend struct {
 	client    *http.Client
 	transport http.Transport
+	Service   string
 	Interval  int
 	URL       string
 	DB        string
@@ -66,6 +67,7 @@ func NewHttpBackend(cfg *BackendConfig) (hb *HttpBackend) {
 		Active:    true,
 		running:   true,
 		WriteOnly: cfg.WriteOnly,
+		Service:   cfg.Service,
 	}
 	go hb.CheckActive()
 	return
@@ -94,6 +96,9 @@ func (hb *HttpBackend) IsActive() bool {
 }
 
 func (hb *HttpBackend) Ping() (version string, err error) {
+	if hb.Service == "kapacitor" {
+		return "kapacitor", nil
+	}
 	resp, err := hb.client.Get(hb.URL + "/ping")
 	if err != nil {
 		log.Print("http error: ", err)
