@@ -25,6 +25,6 @@ clean:
 dev:
 	mkdir -p bin
 	go build -o bin/influx-proxy github.com/alastairruhm/influx-proxy/service
-	bin/influx-proxy -log-file-path ""
+	bin/influx-proxy -log-file-path "" -node 145ad3eebbbc4894bb4b5e248a312bfd
 
 ### Makefile ends here
