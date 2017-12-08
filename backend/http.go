@@ -194,6 +194,11 @@ func (hb *HttpBackend) WriteStream(stream io.Reader, compressed bool) (err error
 	q := url.Values{}
 	q.Set("db", hb.DB)
 
+	// Set rp=autogen as default param for kapacitor backends
+	if hb.Service == "kapacitor" {
+		q.Set("rp", "autogen")
+	}
+
 	req, err := http.NewRequest("POST", hb.URL+"/write?"+q.Encode(), stream)
 	if compressed {
 		req.Header.Add("Content-Encoding", "gzip")
